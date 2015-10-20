@@ -11,6 +11,7 @@ if sys.version_info >= (3,):
 else:
     import copy_reg
 from contextlib import contextmanager
+
 from types import FunctionType
 
 from .catom import (

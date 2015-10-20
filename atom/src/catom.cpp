@@ -359,7 +359,6 @@ CAtom_methods[] = {
 
 PyTypeObject CAtom_Type = {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
-    // 0,                                      /* ob_size */
     PACKAGE_TYPENAME( "CAtom" ),            /* tp_name */
     sizeof( CAtom ),                        /* tp_basicsize */
     0,                                      /* tp_itemsize */
@@ -367,7 +366,7 @@ PyTypeObject CAtom_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    (cmpfunc)0,                             /* tp_compare */
+    0,                                      /* tp_reserved */
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)0,                  /* tp_as_sequence */

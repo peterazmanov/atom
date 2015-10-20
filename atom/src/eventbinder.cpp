@@ -120,7 +120,6 @@ EventBinder_methods[] = {
 
 PyTypeObject EventBinder_Type = {
     PyVarObject_HEAD_INIT( NULL, 0 )
-    //0,                                      /* ob_size */
     "EventBinder",                          /* tp_name */
     sizeof( EventBinder ),                  /* tp_basicsize */
     0,                                      /* tp_itemsize */
@@ -128,7 +127,7 @@ PyTypeObject EventBinder_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    (cmpfunc)0,                             /* tp_compare */
+    0,                                      /* tp_reserved */
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)0,                  /* tp_as_sequence */

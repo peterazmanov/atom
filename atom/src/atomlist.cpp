@@ -460,7 +460,6 @@ AtomList_as_mapping = {
 
 PyTypeObject AtomList_Type = {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
-    //0,                                      /* ob_size */
     PACKAGE_TYPENAME( "atomlist" ),         /* tp_name */
     sizeof( AtomList ),                     /* tp_basicsize */
     0,                                      /* tp_itemsize */
@@ -468,7 +467,7 @@ PyTypeObject AtomList_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    (cmpfunc)0,                             /* tp_compare */
+    0,                                      /* tp_reserved */
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)&AtomList_as_sequence, /* tp_as_sequence */
@@ -1107,17 +1106,17 @@ AtomCList_as_sequence = {
     (binaryfunc)0,                              /* sq_concat */
     (ssizeargfunc)0,                            /* sq_repeat */
     (ssizeargfunc)0,                            /* sq_item */
-    #if PY_MAJOR_VERSION >= 3
-        (void*)0,
-    #else
-        (ssizessizeargfunc)0,                       /* sq_slice */
-    #endif
+#if PY_MAJOR_VERSION >= 3
+    (void *)0,                                  /* sq_slice */
+#else
+    (ssizessizeargfunc)0,                       /* sq_slice */
+#endif
     (ssizeobjargproc)AtomCList_ass_item,        /* sq_ass_item */
-    #if PY_MAJOR_VERSION >= 3
-        (void*)0,                               /* sq_ass_slice (python3) */
-    #else
-        (ssizessizeobjargproc)AtomCList_ass_slice,  /* sq_ass_slice */
-    #endif
+#if PY_MAJOR_VERSION >= 3
+    (void *)0,                                  /* sq_ass_slice */
+#else
+    (ssizessizeobjargproc)AtomCList_ass_slice,  /* sq_ass_slice */
+#endif
     (objobjproc)0,                              /* sq_contains */
     (binaryfunc)AtomCList_inplace_concat,       /* sq_inplace_concat */
     (ssizeargfunc)AtomCList_inplace_repeat,     /* sq_inplace_repeat */
@@ -1134,7 +1133,6 @@ AtomCList_as_mapping = {
 
 PyTypeObject AtomCList_Type = {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
-    //0,                                     /* ob_size */
     PACKAGE_TYPENAME( "atomclist" ),        /* tp_name */
     sizeof( AtomCList ),                    /* tp_basicsize */
     0,                                      /* tp_itemsize */
@@ -1142,7 +1140,7 @@ PyTypeObject AtomCList_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    (cmpfunc)0,                             /* tp_compare */
+    0,                                      /* tp_reserved */
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)&AtomCList_as_sequence, /* tp_as_sequence */

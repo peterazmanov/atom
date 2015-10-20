@@ -7,10 +7,11 @@
 #------------------------------------------------------------------------------
 # Note: This module is imported by 'atom.catom' module from code defined in
 # the 'enumtypes.cpp' file. This module must therefore not import atom.
-try:
-    import copy_reg
-except ImportError:
+import sys
+if sys.version_info >= (3,):
     import copyreg as copy_reg
+else:
+    import copy_reg
 
 
 # IntEnum is not defined until the metaclass creates it.
@@ -118,7 +119,7 @@ class _IntEnumMeta(type):
         enums = {}
         reved = {}
         cls = type.__new__(meta, name, bases, dct)
-        for key, value in cls.__dict__.iteritems():
+        for key, value in cls.__dict__.items():
             if isinstance(value, int):
                 enum = int.__new__(cls, value)
                 enum.__enum_name__ = key

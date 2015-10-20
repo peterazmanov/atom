@@ -153,7 +153,7 @@ Member::check_context( Validate::Mode mode, PyObject* context )
         case Validate::ObjectMethod_OldNew:
         case Validate::ObjectMethod_NameOldNew:
         case Validate::MemberMethod_ObjectOldNew:
-            if( !PyBytes_Check( context ) )
+            if( !PyUnicode_Check( context ) )
             {
                 py_expected_type_fail( context, "str" );
                 return false;
@@ -173,7 +173,7 @@ validate_type_fail( Member* member, CAtom* atom, PyObject* newvalue, const char*
         PyExc_TypeError,
         "The '%s' member on the '%s' object must be of type '%s'. "
         "Got object of type '%s' instead.",
-        _PyUnicode_AsString( member->name ),
+        PyUnicode_1BYTE_DATA( member->name ),
         pyobject_cast( atom )->ob_type->tp_name,
         type,
         newvalue->ob_type->tp_name
@@ -209,7 +209,7 @@ int_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue
 static PyObject*
 int_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
-    if( PyInt_Check( newvalue ) )
+    if( PyLong_Check( newvalue ) )
         return newref( newvalue );
     if( PyFloat_Check( newvalue ) ) {
         double value = PyFloat_AS_DOUBLE( newvalue );
@@ -219,13 +219,13 @@ int_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* 
             PyErr_SetString( PyExc_OverflowError, "Python float too large to convert to C long" );
             return 0;
         }
-        return PyInt_FromLong( static_cast<long>( value ) );
+        return PyLong_FromLong( static_cast<long>( value ) );
     }
     if( PyLong_Check( newvalue ) ) {
         long value = PyLong_AsLong( newvalue );
         if( value == -1 && PyErr_Occurred() )
             return 0;
-        return PyInt_FromLong( value );
+        return PyLong_FromLong( value );
     }
     return validate_type_fail( member, atom, newvalue, "int float or long" );
 }
@@ -285,7 +285,7 @@ float_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject
 static PyObject*
 str_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
-    if( PyBytes_Check( newvalue ) )
+    if( PyUnicode_Check( newvalue ) )
         return newref( newvalue );
     return validate_type_fail( member, atom, newvalue, "str" );
 }
@@ -294,8 +294,6 @@ str_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue
 static PyObject*
 str_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
-    if( PyBytes_Check( newvalue ) )
-        return newref( newvalue );
     if( PyUnicode_Check( newvalue ) )
         return PyUnicode_AsUTF8String( newvalue );
     return validate_type_fail( member, atom, newvalue, "str" );
@@ -316,8 +314,6 @@ unicode_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObje
 {
     if( PyUnicode_Check( newvalue ) )
         return newref( newvalue );
-    if( PyBytes_Check( newvalue ) )
-        return PyUnicode_FromString( PyBytes_AsString(newvalue) );
     return validate_type_fail( member, atom, newvalue, "unicode" );
 }
 

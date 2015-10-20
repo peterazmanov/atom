@@ -45,7 +45,7 @@ Member::check_context( GetAttr::Mode mode, PyObject* context )
         case GetAttr::ObjectMethod:
         case GetAttr::ObjectMethod_Name:
         case GetAttr::MemberMethod_Object:
-            if( !PyBytes_Check( context ) )
+            if( !PyUnicode_Check( context ) )
             {
                 py_expected_type_fail( context, "str" );
                 return false;
@@ -83,7 +83,7 @@ static PyObject*
 slot_handler( Member* member, CAtom* atom )
 {
     if( member->index >= atom->get_slot_count() )
-        return py_no_attr_fail( pyobject_cast( atom ), PyBytes_AsString( member->name ) );
+        return py_no_attr_fail( pyobject_cast( atom ), (char const *)PyUnicode_1BYTE_DATA( member->name ) );
     PyObjectPtr value( atom->get_slot( member->index ) );
     if( value )
     {
@@ -152,8 +152,8 @@ delegate_handler( Member* member, CAtom* atom )
 static PyObject*
 _mangled_property_handler( Member* member, CAtom* atom )
 {
-    char* suffix = PyString_AS_STRING( member->name );
-    PyObjectPtr name( PyString_FromFormat( "_get_%s", suffix ) );
+    char* suffix = (char *)PyUnicode_1BYTE_DATA( member->name );
+    PyObjectPtr name( PyUnicode_FromFormat( "_get_%s", suffix ) );
     if( !name )
         return 0;
     PyObjectPtr callable( PyObject_GetAttr( pyobject_cast( atom ), name.get() ) );

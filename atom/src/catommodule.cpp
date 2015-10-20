@@ -20,11 +20,15 @@
 
 using namespace PythonHelpers;
 
+struct module_state {
+    PyObject *error;
+};
+
 #if PY_MAJOR_VERSION >= 3
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
 #else
-#define GETSTATE(m) (&_catomstate)
-static struct module_state _catomstate;
+#define GETSTATE(m) (&_state)
+static struct module_state _state;
 #endif
 
 static PyMethodDef
@@ -35,18 +39,31 @@ catom_methods[] = {
 };
 
 #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef catom_moduledef = {
-    PyModuleDef_HEAD_INIT,
-    "catom",
-    NULL,
-    sizeof(struct module_state),
-    catom_methods,
-    NULL
+
+static int catom_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(GETSTATE(m)->error);
+    return 0;
+}
+
+static int catom_clear(PyObject *m) {
+    Py_CLEAR(GETSTATE(m)->error);
+    return 0;
+}
+
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "catom",
+        NULL,
+        sizeof(struct module_state),
+        catom_methods,
+        NULL,
+        catom_traverse,
+        catom_clear,
+        NULL
 };
 
 #define INITERROR return NULL
 
-//PyObject*
 PyMODINIT_FUNC
 PyInit_catom( void )
 #else
@@ -55,52 +72,30 @@ PyMODINIT_FUNC
 initcatom( void )
 #endif
 {
-    #if PY_MAJOR_VERSION >= 3
-        PyObject *mod = PyModule_Create( &catom_moduledef );
-        if( !mod )
-            return mod;
-        if( import_member() < 0 )
-            return mod;
-        if( import_memberchange() < 0 )
-            return mod;
-        if( import_catom() < 0 )
-            return mod;
-        if( import_eventbinder() < 0 )
-            return mod;
-        if( import_signalconnector() < 0 )
-            return mod;
-        if( import_atomref() < 0 )
-            return mod;
-        if( import_atomlist() < 0 )
-            return mod;
-        //if( import_atomdict() < 0 )
-        //    return;
-        if( import_enumtypes() < 0 )
-            return mod;
-    #else
-        PyObject* mod = Py_InitModule( "catom", catom_methods );
-            if( !mod )
-                return;
-            if( import_member() < 0 )
-                return;
-            if( import_memberchange() < 0 )
-                return;
-            if( import_catom() < 0 )
-                return;
-            if( import_eventbinder() < 0 )
-                return;
-            if( import_signalconnector() < 0 )
-                return;
-            if( import_atomref() < 0 )
-                return;
-            if( import_atomlist() < 0 )
-                return;
-            //if( import_atomdict() < 0 )
-            //    return;
-            if( import_enumtypes() < 0 )
-                return;
-    #endif
-
+#if PY_MAJOR_VERSION >= 3
+    PyObject *mod = PyModule_Create(&moduledef);
+#else
+#endif
+    if( !mod )
+        INITERROR;
+    if( import_member() < 0 )
+        INITERROR;
+    if( import_memberchange() < 0 )
+        INITERROR;
+    if( import_catom() < 0 )
+        INITERROR;
+    if( import_eventbinder() < 0 )
+        INITERROR;
+    if( import_signalconnector() < 0 )
+        INITERROR;
+    if( import_atomref() < 0 )
+        INITERROR;
+    if( import_atomlist() < 0 )
+        INITERROR;
+    //if( import_atomdict() < 0 )
+    //    INITERROR;
+    if( import_enumtypes() < 0 )
+        INITERROR;
 
 
     Py_INCREF( &Member_Type );
@@ -132,7 +127,7 @@ initcatom( void )
     PyModule_AddObject( mod, "Validate", PyValidate );
     PyModule_AddObject( mod, "PostValidate", PyPostValidate );
 
-    #if PY_MAJOR_VERSION >= 3
-        return mod;
-    #endif
+#if PY_MAJOR_VERSION >= 3
+    return mod;
+#endif
 }

@@ -15,9 +15,8 @@ inline bool
 basestring_check( PyObject* obj )
 {
     return (
-        PyString_CheckExact( obj ) ||
         PyUnicode_CheckExact( obj ) ||
-        PyObject_TypeCheck( obj, &PyBaseString_Type )
+        PyObject_TypeCheck( obj, &PyUnicode_Type ) // TODO: ?
     );
 }
 

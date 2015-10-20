@@ -64,7 +64,7 @@ slot_handler( Member* member, CAtom* atom )
 {
     if( member->index >= atom->get_slot_count() )
     {
-        py_no_attr_fail( pyobject_cast( atom ), PyBytes_AsString( member->name ) );
+        py_no_attr_fail( pyobject_cast( atom ), (char const *)PyUnicode_1BYTE_DATA( member->name ) );
         return -1;
     }
     if( atom->is_frozen() )
@@ -146,8 +146,8 @@ delegate_handler( Member* member, CAtom* atom )
 static int
 _mangled_property_handler( Member* member, CAtom* atom )
 {
-    char* suffix = PyString_AS_STRING( member->name );
-    PyObjectPtr name( PyString_FromFormat( "_del_%s", suffix ) );
+    char* suffix = (char *)PyUnicode_1BYTE_DATA( member->name );
+    PyObjectPtr name( PyUnicode_FromFormat( "_del_%s", suffix ) );
     if( !name )
         return -1;
     PyObjectPtr callable( PyObject_GetAttr( pyobject_cast( atom ), name.get() ) );
