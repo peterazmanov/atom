@@ -202,7 +202,7 @@ class Unicode(Value):
     """
     __slots__ = ()
 
-    def __init__(self, default=u'', factory=None, strict=False):
+    def __init__(self, default='', factory=None, strict=False):
         super(Unicode, self).__init__(default, factory)
         if strict:
             self.set_validate_mode(Validate.Unicode, None)

@@ -16,7 +16,7 @@
    - Provide a pre-created object in the constructor
 
 """
-from __future__ import print_function
+
 
 from atom.api import Atom, Typed, ForwardTyped, Unicode
 

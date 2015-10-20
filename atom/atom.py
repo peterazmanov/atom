@@ -199,7 +199,7 @@ class AtomMeta(type):
         post_validates = []         # Post validate methods: _post_validate_*
         seen_sentinels = set()      # The set of seen sentinels
         seen_decorated = set()      # The set of seen @observe decorators
-        for key, value in dct.iteritems():
+        for key, value in dct.items():
             if isinstance(value, set_default):
                 if value in seen_sentinels:
                     value = value.clone()
@@ -257,7 +257,7 @@ class AtomMeta(type):
         # conflict must be cloned in order to occupy a unique index.
         conflicts = []
         occupied = set()
-        for member in members.itervalues():
+        for member in members.values():
             if member.index in occupied:
                 conflicts.append(member)
             else:
@@ -279,7 +279,7 @@ class AtomMeta(type):
         # assigns the name and the index to the member. If a member is
         # overriding an existing member, the memory index of the old
         # member is reused and any static observers are copied over.
-        for key, value in dct.iteritems():
+        for key, value in dct.items():
             if isinstance(value, Member):
                 if value in owned_members:  # foo = bar = Baz()
                     value = value.clone()
@@ -390,7 +390,7 @@ def __newobj__(cls, *args):
     return cls.__new__(cls, *args)
 
 
-class Atom(CAtom):
+class Atom(CAtom, metaclass=AtomMeta):
     """ The base class for defining atom objects.
 
     `Atom` objects are special Python objects which never allocate an
@@ -404,7 +404,6 @@ class Atom(CAtom):
     than normal objects depending on the number of attributes.
 
     """
-    __metaclass__ = AtomMeta
 
     @classmethod
     def members(cls):
@@ -484,5 +483,5 @@ class Atom(CAtom):
         behavior should reimplement this method.
 
         """
-        for key, value in state.iteritems():
+        for key, value in state.items():
             setattr(self, key, value)

@@ -119,7 +119,7 @@ class _IntEnumMeta(type):
         enums = {}
         reved = {}
         cls = type.__new__(meta, name, bases, dct)
-        for key, value in cls.__dict__.items():
+        for key, value in list(cls.__dict__.items()):
             if isinstance(value, int):
                 enum = int.__new__(cls, value)
                 enum.__enum_name__ = key
@@ -134,7 +134,7 @@ class _IntEnumMeta(type):
         enum = None
         if isinstance(which, int):
             enum = cls.__reved__.get(which)
-        elif isinstance(which, basestring):
+        elif isinstance(which, str):
             enum = cls.__enums__.get(which)
         else:
             msg = "enum specifier must be an int or basestring, "
@@ -155,7 +155,7 @@ class _IntEnumMeta(type):
         return len(cls.__enums__)
 
     def __iter__(cls):
-        return iter(cls.__enums__.values())
+        return iter(list(cls.__enums__.values()))
 
     def __setattr__(cls, name, value):
         if name in cls.__enums__:
@@ -174,11 +174,10 @@ class _IntEnumMeta(type):
         return flags_class
 
 
-class IntEnum(int):
+class IntEnum(int, metaclass=_IntEnumMeta):
     """ An integer subclass for declaring enum types.
 
     """
-    __metaclass__ = _IntEnumMeta
 
     # Set by the metaclass in the Flags property.
     __flags_class__ = None

@@ -134,7 +134,7 @@ class _DictProxy(DictMixin):
         return key in self._data
 
     def keys(self):
-        return self._data.keys()
+        return list(self._data.keys())
 
     def copy(self):
         return self._data.copy()
