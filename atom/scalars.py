@@ -175,26 +175,18 @@ class Float(Value):
         else:
             self.set_validate_mode(Validate.FloatPromote, None)
 
-
-class Str(Value):
-    """ A value of type `str`.
-
-    By default, unicode strings will be promoted to plain strings. Pass
-    strict=True to the constructor to enable strict string checking.
-
+class Bytes(Value):
+    """ A value of type `bytes`.
     """
     __slots__ = ()
 
-    def __init__(self, default='', factory=None, strict=False):
-        super(Str, self).__init__(default, factory)
-        if strict:
-            self.set_validate_mode(Validate.Str, None)
-        else:
-            self.set_validate_mode(Validate.StrPromote, None)
+    def __init__(self, default=b'', factory=None):
+        super(Bytes, self).__init__(default, factory)
+        self.set_validate_mode(Validate.Bytes, None)
 
 
 class Unicode(Value):
-    """ A value of type `unicode`.
+    """ A value of type `str`.
 
     By default, plain strings will be promoted to unicode strings. Pass
     strict=True to the constructor to enable strict unicode checking.
@@ -208,3 +200,5 @@ class Unicode(Value):
             self.set_validate_mode(Validate.Unicode, None)
         else:
             self.set_validate_mode(Validate.UnicodePromote, None)
+
+Str = Unicode

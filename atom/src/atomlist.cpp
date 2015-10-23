@@ -426,24 +426,23 @@ AtomList_methods[] = {
     { 0 }  /* sentinel */
 };
 
-
 static PySequenceMethods
 AtomList_as_sequence = {
     (lenfunc)0,                                 /* sq_length */
     (binaryfunc)0,                              /* sq_concat */
     (ssizeargfunc)0,                            /* sq_repeat */
     (ssizeargfunc)0,                            /* sq_item */
-    #if PY_MAJOR_VERSION >= 3
-        (void*)0,                                   /* sq_slice */
-    #else
-        (ssizessizeargfunc)0,                       /* sq_slice */
-    #endif
+#if PY_MAJOR_VERSION >= 3
+    (void *)0,                                  /* sq_slice */
+#else
+    (ssizessizeargfunc)0,                       /* sq_slice */
+#endif
     (ssizeobjargproc)AtomList_ass_item,         /* sq_ass_item */
-    #if PY_MAJOR_VERSION >= 3
-        (void*)0,                                   /* sq_ass_slice */
-    #else
-        (ssizessizeobjargproc)AtomList_ass_slice,   /* sq_ass_slice */
-    #endif
+#if PY_MAJOR_VERSION >= 3
+    (void *)0,                                  /* sq_ass_slice */
+#else
+    (ssizessizeobjargproc)AtomList_ass_slice,   /* sq_ass_slice */
+#endif
     (objobjproc)0,                              /* sq_contains */
     (binaryfunc)AtomList_inplace_concat,        /* sq_inplace_concat */
     (ssizeargfunc)0,                            /* sq_inplace_repeat */

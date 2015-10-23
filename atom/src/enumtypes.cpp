@@ -209,8 +209,7 @@ int import_enumtypes()
         add_long( dict_ptr, expand_enum( LongPromote ) );
         add_long( dict_ptr, expand_enum( Float ) );
         add_long( dict_ptr, expand_enum( FloatPromote ) );
-        add_long( dict_ptr, expand_enum( Str ) );
-        add_long( dict_ptr, expand_enum( StrPromote ) );
+        add_long( dict_ptr, expand_enum( Bytes ) );
         add_long( dict_ptr, expand_enum( Unicode ) );
         add_long( dict_ptr, expand_enum( UnicodePromote ) );
         add_long( dict_ptr, expand_enum( Tuple ) );

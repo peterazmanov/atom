@@ -281,31 +281,20 @@ float_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject
     return validate_type_fail( member, atom, newvalue, "float" );
 }
 
-
 static PyObject*
-str_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
+bytes_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
-    if( PyUnicode_Check( newvalue ) )
+    if( PyBytes_Check( newvalue ) )
         return newref( newvalue );
-    return validate_type_fail( member, atom, newvalue, "str" );
+    return validate_type_fail( member, atom, newvalue, "bytes" );
 }
-
-
-static PyObject*
-str_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
-{
-    if( PyUnicode_Check( newvalue ) )
-        return PyUnicode_AsUTF8String( newvalue );
-    return validate_type_fail( member, atom, newvalue, "str" );
-}
-
 
 static PyObject*
 unicode_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
     if( PyUnicode_Check( newvalue ) )
         return newref( newvalue );
-    return validate_type_fail( member, atom, newvalue, "unicode" );
+    return validate_type_fail( member, atom, newvalue, "str" );
 }
 
 
@@ -314,7 +303,7 @@ unicode_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObje
 {
     if( PyUnicode_Check( newvalue ) )
         return newref( newvalue );
-    return validate_type_fail( member, atom, newvalue, "unicode" );
+    return validate_type_fail( member, atom, newvalue, "str" );
 }
 
 
@@ -700,8 +689,7 @@ handlers[] = {
     long_promote_handler,
     float_handler,
     float_promote_handler,
-    str_handler,
-    str_promote_handler,
+    bytes_handler,
     unicode_handler,
     unicode_promote_handler,
     tuple_handler,

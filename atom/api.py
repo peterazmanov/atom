@@ -21,8 +21,8 @@ from .intenum import IntEnum
 from .list import List
 from .property import Property, cached_property
 from .scalars import (
-    Value, ReadOnly, Constant, Callable, Bool, Int, Long, Range, Float, Str,
-    Unicode, FloatRange
+    Value, ReadOnly, Constant, Callable, Bool, Int, Long, Range, Float, Bytes,
+    Str, Unicode, FloatRange
 )
 from .signal import Signal
 from .subclass import Subclass, ForwardSubclass
