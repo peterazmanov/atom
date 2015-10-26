@@ -607,28 +607,6 @@ sortedmap_methods[] = {
 };
 
 #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef sortedmap_moduledef = {
-    PyModuleDef_HEAD_INIT,
-    "sortedmap",
-    NULL, 
-    sizeof(struct module_state),
-    sortedmap_methods,
-    NULL,
-    SortedMap_traverse,
-    SortedMap_clear,
-    NULL
-};
-
-#define INITERROR return NULL
-
-PyMODINIT_FUNC //PyObject*
-PyInit_sortedmap( void )
-
-#else
-
-#define INITERROR return
-
-#if PY_MAJOR_VERSION >= 3
 
 static int sortedmap_traverse(PyObject *m, visitproc visit, void *arg) {
     Py_VISIT(GETSTATE(m)->error);
