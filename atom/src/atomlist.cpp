@@ -7,6 +7,7 @@
 |----------------------------------------------------------------------------*/
 #include "atomlist.h"
 #include "packagenaming.h"
+#include "py23compat.h"
 
 
 using namespace PythonHelpers;
@@ -140,7 +141,7 @@ class AtomListHandler
 
 public:
 
-    AtomListHandler( AtomList* list ) : 
+    AtomListHandler( AtomList* list ) :
         m_list( newref( pyobject_cast( list ) ) ) {}
 
     PyObject* append( PyObject* value )
@@ -163,7 +164,7 @@ public:
         PyTuplePtr nargs( PyTuple_New( 2 ) );
         if( !nargs )
             return 0;
-        nargs.initialize( 0, PyLong_FromSsize_t( index ) );
+        nargs.initialize( 0, Py23Int_FromSsize_t( index ) );
         nargs.initialize( 1, valptr.release() );
         return ListMethods::insert( m_list.get(), nargs.get() );
     }
@@ -520,7 +521,7 @@ public:
 
     PyStringMaker( const char* string ) : m_pystring( 0 )
     {
-        m_pystring = PyUnicode_FromString( string );
+        m_pystring = Py23Str_FromString( string );
     }
 
     PyObject* operator()()
@@ -630,9 +631,9 @@ public:
             if( !c.set_item( PySStr::operation(), PySStr::insert() ) )
                 return 0;
             // if the superclass call succeeds, then this is safe.
-            Py_ssize_t where = PyLong_AsSsize_t( PyTuple_GET_ITEM( args, 0 ) );
+            Py_ssize_t where = Py23Int_AsSsize_t( PyTuple_GET_ITEM( args, 0 ) );
             clip_index( where, size );
-            PyObjectPtr index( PyLong_FromSsize_t( where ) );
+            PyObjectPtr index( Py23Int_FromSsize_t( where ) );
             if( !c.set_item( PySStr::index(), index ) )
                 return 0;
             if( !c.set_item( PySStr::item(), m_validated ) )
@@ -679,10 +680,10 @@ public:
             // if the superclass call succeeds, then this is safe.
             Py_ssize_t i = -1;
             if( PyTuple_GET_SIZE( args ) == 1 )
-                i = PyLong_AsSsize_t( PyTuple_GET_ITEM( args, 0 ) );
+                i = Py23Int_AsSsize_t( PyTuple_GET_ITEM( args, 0 ) );
             if( i < 0 )
                 i += size;
-            PyObjectPtr index( PyLong_FromSsize_t( i ) );
+            PyObjectPtr index( Py23Int_FromSsize_t( i ) );
             if( !c.set_item( PySStr::index(), index ) )
                 return 0;
             if( !c.set_item( PySStr::item(), res ) )
@@ -795,7 +796,7 @@ public:
                 return 0;
             if( !c.set_item( PySStr::operation(), PySStr::__imul__() ) )
                 return 0;
-            PyObjectPtr pycount( PyLong_FromSsize_t( count ) );
+            PyObjectPtr pycount( Py23Int_FromSsize_t( count ) );
             if( !pycount )
                 return 0;
             if( !c.set_item( PySStr::count(), pycount ) )
@@ -821,7 +822,7 @@ public:
             return res;
         if( obs )
         {
-            PyObjectPtr pyindex( PyLong_FromSsize_t( index ) );
+            PyObjectPtr pyindex( Py23Int_FromSsize_t( index ) );
             if( !pyindex )
                 return -1;
             res = post_setitem_change( pyindex, olditem, m_validated );

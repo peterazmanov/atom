@@ -7,6 +7,7 @@
 |----------------------------------------------------------------------------*/
 #include "enumtypes.h"
 #include "packagenaming.h"
+#include "py23compat.h"
 
 using namespace PythonHelpers;
 
@@ -32,7 +33,7 @@ namespace {
 template<typename T> inline bool
 add_long( PyDictPtr& dict_ptr, const char* name, T value )
 {
-    PyObjectPtr pyint( PyLong_FromLong( static_cast<long>( value ) ) );
+    PyObjectPtr pyint( Py23Int_FromLong( static_cast<long>( value ) ) );
     if( !pyint )
         return false;
     if( !dict_ptr.set_item( name, pyint ) )
@@ -44,7 +45,7 @@ add_long( PyDictPtr& dict_ptr, const char* name, T value )
 inline PyObject*
 make_enum( const char* name, PyDictPtr& dict_ptr )
 {
-    PyObjectPtr pyname( PyUnicode_FromString( name ) );
+    PyObjectPtr pyname( Py23Str_FromString( name ) );
     if( !pyname )
         return 0;
     PyObjectPtr pybases( PyTuple_Pack( 1, PyIntEnum ) );
@@ -53,7 +54,7 @@ make_enum( const char* name, PyDictPtr& dict_ptr )
     PyDictPtr pydict( PyDict_Copy( dict_ptr.get() ) );
     if( !pydict )
         return 0;
-    PyObjectPtr modname( PyUnicode_FromString( PACKAGE_PREFIX ) );
+    PyObjectPtr modname( Py23Str_FromString( PACKAGE_PREFIX ) );
     if( !modname )
         return 0;
     if( !pydict.set_item( "__module__", modname ) )

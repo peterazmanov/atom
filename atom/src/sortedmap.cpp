@@ -485,8 +485,8 @@ SortedMap_repr( SortedMap* self )
         PyObjectPtr valstr( PyObject_Str( it->value() ) );
         if( !valstr )
             return 0;
-        ostr << PyUnicode_1BYTE_DATA( keystr.get() ) << ": ";
-        ostr << PyUnicode_1BYTE_DATA( valstr.get() ) << ", ";
+        ostr << Py23Str_AS_STRING( keystr.get() ) << ": ";
+        ostr << Py23Str_AS_STRING( valstr.get() ) << ", ";
     }
     if( self->m_items->size() > 0 )
         ostr.seekp( -2, std::ios_base::cur );
@@ -510,7 +510,7 @@ SortedMap_sizeof( SortedMap* self, PyObject* args )
     Py_ssize_t size = Py_TYPE(self)->tp_basicsize;
     size += sizeof( SortedMap::Items );
     size += sizeof( MapItem ) * self->m_items->capacity();
-    return PyLong_FromSsize_t( size );
+    return Py23Int_FromSsize_t( size );
 }
 
 
@@ -549,7 +549,11 @@ PyTypeObject SortedMap_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    0,                                      /* tp_reserved */
+#if PY_MAJOR_VERSION >= 3
+    (void* ) 0,                             /* tp_reserved */
+#else
+    ( cmpfunc )0,                           /* tp_compare */
+#endif
     (reprfunc)SortedMap_repr,               /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)&SortedMap_as_sequence, /* tp_as_sequence */

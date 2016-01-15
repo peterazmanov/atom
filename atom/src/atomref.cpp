@@ -13,6 +13,7 @@
 #include "catompointer.h"
 #include "globalstatic.h"
 #include "packagenaming.h"
+#include "py23compat.h"
 
 
 #define atomref_cast( o ) ( reinterpret_cast<AtomRef*>( o ) )
@@ -106,10 +107,10 @@ AtomRef_repr( AtomRef* self )
         PyObjectPtr repr( PyObject_Repr( obj ) );
         if( !repr )
             return 0;
-        ostr << PyUnicode_1BYTE_DATA( repr.get() );
+        ostr << Py23Str_AS_STRING( repr.get() );
     }
     ostr << ")";
-    return PyUnicode_FromString( ostr.str().c_str() );
+    return Py23Str_FromString( ostr.str().c_str() );
 }
 
 
@@ -118,7 +119,7 @@ AtomRef_sizeof( AtomRef* self, PyObject* args )
 {
     Py_ssize_t size = Py_TYPE(self)->tp_basicsize;
     size += sizeof( CAtomPointer );
-    return PyLong_FromSsize_t( size );
+    return Py23Int_FromSsize_t( size );
 }
 
 
@@ -163,7 +164,11 @@ PyTypeObject AtomRef_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    0,                                      /* tp_reserved */
+#if PY_MAJOR_VERSION >= 3
+    (void* ) 0,                             /* tp_reserved */
+#else
+    ( cmpfunc )0,                           /* tp_compare */
+#endif
     (reprfunc)AtomRef_repr,                 /* tp_repr */
     (PyNumberMethods*)&AtomRef_as_number,   /* tp_as_number */
     (PySequenceMethods*)0,                  /* tp_as_sequence */

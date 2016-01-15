@@ -142,7 +142,11 @@ PyTypeObject SignalConnector_Type = {
     (printfunc)0,                           /* tp_print */
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
-    0,                                      /* tp_reserved */
+#if PY_MAJOR_VERSION >= 3
+    (void* ) 0,                             /* tp_reserved */
+#else
+    ( cmpfunc )0,                           /* tp_compare */
+#endif
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
     (PySequenceMethods*)0,                  /* tp_as_sequence */
