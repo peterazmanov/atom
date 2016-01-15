@@ -14,6 +14,8 @@
 5. Use a _default_* static method
 
 """
+from __future__ import (division, unicode_literals, print_function,
+                        absolute_import)
 
 import sys
 
