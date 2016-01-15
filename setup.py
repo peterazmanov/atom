@@ -70,7 +70,7 @@ setup(
     url='https://github.com/nucleic/atom',
     description='Memory efficient Python objects',
     long_description=open('README.rst').read(),
-    install_requires=['distribute'],
+    install_requires=['distribute', 'future'],
     packages=find_packages(),
     ext_modules=ext_modules,
     cmdclass={'build_ext': BuildExt},
