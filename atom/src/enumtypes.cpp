@@ -211,6 +211,9 @@ int import_enumtypes()
         add_long( dict_ptr, expand_enum( Float ) );
         add_long( dict_ptr, expand_enum( FloatPromote ) );
         add_long( dict_ptr, expand_enum( Bytes ) );
+        add_long( dict_ptr, expand_enum( BytesPromote ) );
+        add_long( dict_ptr, expand_enum( String ) );
+        add_long( dict_ptr, expand_enum( StringPromote ) );
         add_long( dict_ptr, expand_enum( Unicode ) );
         add_long( dict_ptr, expand_enum( UnicodePromote ) );
         add_long( dict_ptr, expand_enum( Tuple ) );
