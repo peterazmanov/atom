@@ -7,8 +7,7 @@
 #------------------------------------------------------------------------------
 # Note: This module is imported by 'atom.catom' module from code defined in
 # the 'enumtypes.cpp' file. This module must therefore not import atom.
-from __future__ import (division, unicode_literals, print_function,
-                        absolute_import)
+from __future__ import (division, print_function, absolute_import)
 
 import sys
 if sys.version_info >= (3,):

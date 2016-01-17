@@ -8,8 +8,7 @@
 """ The version information for this release of Atom.
 
 """
-from __future__ import (division, unicode_literals, print_function,
-                        absolute_import)
+from __future__ import (division, print_function, absolute_import)
 
 from collections import namedtuple
 

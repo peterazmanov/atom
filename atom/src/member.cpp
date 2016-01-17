@@ -368,7 +368,7 @@ static PyObject*
 Member_set_name( Member* self, PyObject* value )
 {
     if( !Py23Str_CheckExact( value ) )
-        return py_expected_type_fail( value, "unicode" );
+        return py_expected_type_fail( value, "str" );
     Py_INCREF( value ); // incref before interning or segfault!
     Py23Str_InternInPlace( &value );
     PyObject* old = self->name;
