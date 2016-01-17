@@ -25,7 +25,7 @@ MINOR = 3
 
 # The micro release number. The micro release number is incremented
 # for bug fix releases and small feature additions.
-MICRO = 10
+MICRO = 11
 
 # The version info for the current release.
 version_info = namedtuple('version_info', 'major minor micro')

@@ -62,14 +62,14 @@ class BuildExt(build_ext):
 
 setup(
     name='atom',
-    version='0.3.10',
+    version='0.3.11',
     author='The Nucleic Development Team',
     author_email='sccolbert@gmail.com',
     url='https://github.com/nucleic/atom',
     description='Memory efficient Python objects',
     long_description=open('README.rst').read(),
     install_requires=['future'],
-    packages=find_packages(),
+    packages=find_packages(exclude='tests'),
     ext_modules=ext_modules,
     cmdclass={'build_ext': BuildExt},
 )

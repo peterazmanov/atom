@@ -202,7 +202,7 @@ class Str(Value):
 
     """
     def __init__(self, default='', factory=None, strict=False):
-        super(Unicode, self).__init__(default, factory)
+        super(Str, self).__init__(default, factory)
         if strict:
             self.set_validate_mode(Validate.String, None)
         else:
@@ -224,4 +224,3 @@ class Unicode(Value):
             self.set_validate_mode(Validate.Unicode, None)
         else:
             self.set_validate_mode(Validate.UnicodePromote, None)
-
