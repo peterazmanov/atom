@@ -15,6 +15,13 @@
 #include "packagenaming.h"
 #include "py23compat.h"
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
+#endif
+
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
 
 #define atomref_cast( o ) ( reinterpret_cast<AtomRef*>( o ) )
 

@@ -9,6 +9,13 @@
 #include "packagenaming.h"
 #include "py23compat.h"
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wdeprecated-writable-strings"
+#endif
+
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
 
 using namespace PythonHelpers;
 
@@ -388,11 +395,13 @@ AtomList_ass_item( AtomList* self, Py_ssize_t index, PyObject* value )
     return AtomListHandler( self ).setitem( index, value );
 }
 
+#if PY_MAJOR_VERSION < 3
 static int
 AtomList_ass_slice( AtomList* self, Py_ssize_t low, Py_ssize_t high, PyObject* value )
 {
     return AtomListHandler( self ).setitem( low, high, value );
 }
+#endif
 
 static PyObject*
 AtomList_inplace_concat( AtomList* self, PyObject* value )
@@ -1040,11 +1049,13 @@ AtomCList_ass_item( AtomCList* self, Py_ssize_t index, PyObject* value )
 }
 
 
+#if PY_MAJOR_VERSION < 3
 static int
 AtomCList_ass_slice( AtomCList* self, Py_ssize_t low, Py_ssize_t high, PyObject* value )
 {
     return AtomCListHandler( self ).setitem( low, high, value );
 }
+#endif
 
 
 static PyObject*

@@ -7,7 +7,6 @@
 #------------------------------------------------------------------------------
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
-import sys
 
 
 ext_modules = [
@@ -61,7 +60,6 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 
-
 setup(
     name='atom',
     version='0.3.10',
@@ -70,7 +68,7 @@ setup(
     url='https://github.com/nucleic/atom',
     description='Memory efficient Python objects',
     long_description=open('README.rst').read(),
-    install_requires=['distribute', 'future'],
+    install_requires=['future'],
     packages=find_packages(),
     ext_modules=ext_modules,
     cmdclass={'build_ext': BuildExt},

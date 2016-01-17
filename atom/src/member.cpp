@@ -174,7 +174,7 @@ Member_get_slot( Member* self, PyObject* object )
         return py_expected_type_fail( object, "CAtom" );
     CAtom* atom = catom_cast( object );
     if( self->index >= atom->get_slot_count() )
-        return py_no_attr_fail( object, (char *)Py23Str_1BYTE_DATA( self->name ) );
+        return py_no_attr_fail( object, (char *)Py23Str_AS_STRING( self->name ) );
     PyObjectPtr value( atom->get_slot( self->index ) );
     if( value )
         return value.release();
@@ -193,7 +193,7 @@ Member_set_slot( Member* self, PyObject* args )
         return py_expected_type_fail( object, "CAtom" );
     CAtom* atom = catom_cast( object );
     if( self->index >= atom->get_slot_count() )
-        return py_no_attr_fail( object, (char *)Py23Str_1BYTE_DATA( self->name ) );
+        return py_no_attr_fail( object, (char *)Py23Str_AS_STRING( self->name ) );
     atom->set_slot( self->index, value );
     Py_RETURN_NONE;
 }
@@ -206,7 +206,7 @@ Member_del_slot( Member* self, PyObject* object )
         return py_expected_type_fail( object, "CAtom" );
     CAtom* atom = catom_cast( object );
     if( self->index >= atom->get_slot_count() )
-        return py_no_attr_fail( object, (char *)Py23Str_1BYTE_DATA( self->name ) );
+        return py_no_attr_fail( object, (char *)Py23Str_AS_STRING( self->name ) );
     atom->set_slot( self->index, 0 );
     Py_RETURN_NONE;
 }

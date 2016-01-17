@@ -296,8 +296,8 @@ bytes_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject
     if( Py23Bytes_Check( newvalue ) )
         return newref( newvalue );
 
-    if( PyUnicode_Check( value ) )
-		return PyUnicode_AsUTF8String( value );
+    if( PyUnicode_Check( newvalue ) )
+		return PyUnicode_AsUTF8String( newvalue );
 
     return validate_type_fail( member, atom, newvalue, "bytes" );
 }
@@ -317,12 +317,12 @@ string_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObjec
     if( Py23Str_Check( newvalue ) )
         return newref( newvalue );
 #ifdef IS_PY3K
-	if( PyBytes_Check( value ) )
-        	return PyUnicode_FromString( PyBytes_AS_STRING( value ) );
+	if( PyBytes_Check( newvalue ) )
+        	return PyUnicode_FromString( PyBytes_AS_STRING( newvalue ) );
 
 #else
-	if( PyUnicode_Check( value ) )
-		return PyUnicode_AsUTF8String( value );
+	if( PyUnicode_Check( newvalue ) )
+		return PyUnicode_AsUTF8String( newvalue );
 
 #endif
     return validate_type_fail( member, atom, newvalue, "str" );
@@ -343,8 +343,8 @@ unicode_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObje
     if( PyUnicode_Check( newvalue ) )
         return newref( newvalue );
 
-    if( Py23Bytes_Check( value ) )
-		return PyUnicode_FromString( Py23Bytes_AS_STRING( value ) );
+    if( Py23Bytes_Check( newvalue ) )
+		return PyUnicode_FromString( Py23Bytes_AS_STRING( newvalue ) );
 
     return validate_type_fail( member, atom, newvalue, "str" );
 }
@@ -618,15 +618,15 @@ range_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newval
         return validate_type_fail( member, atom, newvalue, "int" );
     PyObject* low = PyTuple_GET_ITEM( member->validate_context, 0 );
     PyObject* high = PyTuple_GET_ITEM( member->validate_context, 1 );
-    long value = Py23Int_AS_LONG( newvalue );
+    long value = Py23Int_AsLong( newvalue );
     if( low != Py_None )
     {
-        if( Py23Int_AS_LONG( low ) > value )
+        if( Py23Int_AsLong( low ) > value )
             return py_type_fail( "range value too small" );
     }
     if( high != Py_None )
     {
-        if( Py23Int_AS_LONG( high ) < value )
+        if( Py23Int_AsLong( high ) < value )
             return py_type_fail( "range value too large" );
     }
     return newref( newvalue );

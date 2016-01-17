@@ -10,20 +10,9 @@
 #include <iostream>
 #include <sstream>
 #include "pythonhelpers.h"
-
+#include "py23compat.h"
 
 using namespace PythonHelpers;
-
-#if PY_MAJOR_VERSION >= 3
-
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-
-#else
-
-#define GETSTATE(m) (&_state)
-static struct module_state _state;
-
-#endif
 
 class MapItem
 {
@@ -306,7 +295,6 @@ SortedMap_new( PyTypeObject* type, PyObject* args, PyObject* kwargs )
         // destructors run for the old items.
         SortedMap::Items empty;
         self->m_items->swap( empty );
-        //Py_CLEAR(GETSTATE(self)->error);
     }
 #endif
 
@@ -600,9 +588,6 @@ struct module_state {
 
 #if PY_MAJOR_VERSION >= 3
 #define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-#else
-#define GETSTATE(m) (&_state)
-static struct module_state _state;
 #endif
 
 static PyMethodDef
@@ -636,16 +621,16 @@ static struct PyModuleDef moduledef = {
 };
 
 #define INITERROR return NULL
-
-PyMODINIT_FUNC
-PyInit_sortedmap(void)
+#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
 
 #else
-#define INITERROR return
 
-PyMODINIT_FUNC
-initsortedmap(void)
+#define INITERROR return
+#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
+
 #endif
+
+MOD_INIT( sortedmap )
 {
 #if PY_MAJOR_VERSION >= 3
     PyObject *mod = PyModule_Create(&moduledef);

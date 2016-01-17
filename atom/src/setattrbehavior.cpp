@@ -96,7 +96,7 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
 {
     if( member->index >= atom->get_slot_count() )
     {
-        py_no_attr_fail( pyobject_cast( atom ), (char *)Py23Str_1BYTE_DATA( member->name ) );
+        py_no_attr_fail( pyobject_cast( atom ), (char *)Py23Str_AS_STRING( member->name ) );
         return -1;
     }
     if( atom->is_frozen() )
@@ -170,7 +170,7 @@ read_only_handler( Member* member, CAtom* atom, PyObject* value )
 {
     if( member->index >= atom->get_slot_count() )
     {
-        py_no_attr_fail( pyobject_cast( atom ), (char *)Py23Str_1BYTE_DATA( member->name ) );
+        py_no_attr_fail( pyobject_cast( atom ), (char *)Py23Str_AS_STRING( member->name ) );
         return -1;
     }
     PyObjectPtr slot( atom->get_slot( member->index ) );
@@ -249,7 +249,7 @@ delegate_handler( Member* member, CAtom* atom, PyObject* value )
 static int
 _mangled_property_handler( Member* member, CAtom* atom, PyObject* value )
 {
-    char* suffix = (char *)Py23Str_1BYTE_DATA( member->name );
+    char* suffix = (char *)Py23Str_AS_STRING( member->name );
     PyObjectPtr name( Py23Str_FromFormat( "_set_%s", suffix ) );
     if( !name )
         return -1;
