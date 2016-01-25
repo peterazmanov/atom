@@ -30,31 +30,15 @@ catom_methods[] = {
 
 #if PY_MAJOR_VERSION >= 3
 
-struct module_state {
-    PyObject *error;
-};
-
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-
-static int catom_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
-    return 0;
-}
-
-static int catom_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
-    return 0;
-}
-
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "catom",
-        NULL,
-        sizeof(struct module_state),
+        "catom extension module",
+        -1,
         catom_methods,
         NULL,
-        catom_traverse,
-        catom_clear,
+        NULL,
+        NULL,
         NULL
 };
 

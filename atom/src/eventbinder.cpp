@@ -129,9 +129,13 @@ PyTypeObject EventBinder_Type = {
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
 #if PY_MAJOR_VERSION >= 3
-    (void* ) 0,                             /* tp_reserved */
+#if PY_MINOR_VERSION > 4
+	( PyAsyncMethods* )0,                  /* tp_as_async */
 #else
-    ( cmpfunc )0,                           /* tp_compare */
+	( void* ) 0,                           /* tp_reserved */
+#endif
+#else
+	( cmpfunc )0,                          /* tp_compare */
 #endif
     (reprfunc)0,                            /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */

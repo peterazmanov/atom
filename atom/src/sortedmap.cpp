@@ -538,9 +538,13 @@ PyTypeObject SortedMap_Type = {
     (getattrfunc)0,                         /* tp_getattr */
     (setattrfunc)0,                         /* tp_setattr */
 #if PY_MAJOR_VERSION >= 3
-    (void* ) 0,                             /* tp_reserved */
+#if PY_MINOR_VERSION > 4
+	( PyAsyncMethods* )0,                  /* tp_as_async */
 #else
-    ( cmpfunc )0,                           /* tp_compare */
+	( void* ) 0,                           /* tp_reserved */
+#endif
+#else
+	( cmpfunc )0,                          /* tp_compare */
 #endif
     (reprfunc)SortedMap_repr,               /* tp_repr */
     (PyNumberMethods*)0,                    /* tp_as_number */
@@ -582,14 +586,6 @@ PyTypeObject SortedMap_Type = {
 };
 
 
-struct module_state {
-    PyObject *error;
-};
-
-#if PY_MAJOR_VERSION >= 3
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-#endif
-
 static PyMethodDef
 sortedmap_methods[] = {
     { 0 } // Sentinel
@@ -597,26 +593,15 @@ sortedmap_methods[] = {
 
 #if PY_MAJOR_VERSION >= 3
 
-static int sortedmap_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
-    return 0;
-}
-
-static int sortedmap_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
-    return 0;
-}
-
-
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "sortedmap",
-        NULL,
-        sizeof(struct module_state),
+        "sortedmap extension module",
+        -1,
         sortedmap_methods,
         NULL,
-        sortedmap_traverse,
-        sortedmap_clear,
+        NULL,
+        NULL,
         NULL
 };
 
