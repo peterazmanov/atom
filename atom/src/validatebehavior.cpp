@@ -316,7 +316,7 @@ string_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObjec
 {
     if( Py23Str_Check( newvalue ) )
         return newref( newvalue );
-#ifdef IS_PY3K
+#if PY_MAJOR_VERSION >= 3
     if( PyBytes_Check( newvalue ) )
         return PyUnicode_FromString( PyBytes_AS_STRING( newvalue ) );
 
