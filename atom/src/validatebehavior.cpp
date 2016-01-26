@@ -297,7 +297,7 @@ bytes_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject
         return newref( newvalue );
 
     if( PyUnicode_Check( newvalue ) )
-		return PyUnicode_AsUTF8String( newvalue );
+        return PyUnicode_AsUTF8String( newvalue );
 
     return validate_type_fail( member, atom, newvalue, "bytes" );
 }
@@ -317,12 +317,12 @@ string_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObjec
     if( Py23Str_Check( newvalue ) )
         return newref( newvalue );
 #ifdef IS_PY3K
-	if( PyBytes_Check( newvalue ) )
-        	return PyUnicode_FromString( PyBytes_AS_STRING( newvalue ) );
+    if( PyBytes_Check( newvalue ) )
+        return PyUnicode_FromString( PyBytes_AS_STRING( newvalue ) );
 
 #else
-	if( PyUnicode_Check( newvalue ) )
-		return PyUnicode_AsUTF8String( newvalue );
+    if( PyUnicode_Check( newvalue ) )
+        return PyUnicode_AsUTF8String( newvalue );
 
 #endif
     return validate_type_fail( member, atom, newvalue, "str" );
@@ -344,7 +344,7 @@ unicode_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObje
         return newref( newvalue );
 
     if( Py23Bytes_Check( newvalue ) )
-		return PyUnicode_FromString( Py23Bytes_AS_STRING( newvalue ) );
+        return PyUnicode_FromString( Py23Bytes_AS_STRING( newvalue ) );
 
     return validate_type_fail( member, atom, newvalue, "str" );
 }

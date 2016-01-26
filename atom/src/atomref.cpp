@@ -173,12 +173,12 @@ PyTypeObject AtomRef_Type = {
     (setattrfunc)0,                         /* tp_setattr */
 #if PY_MAJOR_VERSION >= 3
 #if PY_MINOR_VERSION > 4
-	( PyAsyncMethods* )0,                  /* tp_as_async */
+    ( PyAsyncMethods* )0,                  /* tp_as_async */
 #else
-	( void* ) 0,                           /* tp_reserved */
+    ( void* ) 0,                           /* tp_reserved */
 #endif
 #else
-	( cmpfunc )0,                          /* tp_compare */
+    ( cmpfunc )0,                          /* tp_compare */
 #endif
     (reprfunc)AtomRef_repr,                 /* tp_repr */
     (PyNumberMethods*)&AtomRef_as_number,   /* tp_as_number */
