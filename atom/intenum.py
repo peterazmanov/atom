@@ -7,11 +7,16 @@
 #------------------------------------------------------------------------------
 # Note: This module is imported by 'atom.catom' module from code defined in
 # the 'enumtypes.cpp' file. This module must therefore not import atom.
+from __future__ import (division, print_function, absolute_import)
+
 import sys
 if sys.version_info >= (3,):
     import copyreg as copy_reg
 else:
     import copy_reg
+
+from future.utils import with_metaclass
+from past.builtins import basestring
 
 
 # IntEnum is not defined until the metaclass creates it.
@@ -134,7 +139,7 @@ class _IntEnumMeta(type):
         enum = None
         if isinstance(which, int):
             enum = cls.__reved__.get(which)
-        elif isinstance(which, str):
+        elif isinstance(which, basestring):
             enum = cls.__enums__.get(which)
         else:
             msg = "enum specifier must be an int or basestring, "
@@ -174,7 +179,7 @@ class _IntEnumMeta(type):
         return flags_class
 
 
-class IntEnum(int, metaclass=_IntEnumMeta):
+class IntEnum(with_metaclass(_IntEnumMeta, int)):
     """ An integer subclass for declaring enum types.
 
     """

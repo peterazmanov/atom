@@ -5,6 +5,8 @@
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 #------------------------------------------------------------------------------
+from __future__ import (division, print_function, absolute_import)
+
 import sys
 if sys.version_info >= (3,):
     import copyreg as copy_reg
@@ -13,6 +15,7 @@ else:
 from contextlib import contextmanager
 
 from types import FunctionType
+from future.utils import with_metaclass
 
 from .catom import (
     CAtom, Member, DefaultValue, PostGetAttr, PostSetAttr, Validate,
@@ -322,7 +325,8 @@ class AtomMeta(type):
             target = mangled[n:]
             if target in members:
                 member = clone_if_needed(members[target])
-                member.set_default_value_mode(DefaultValue.ObjectMethod, mangled)
+                member.set_default_value_mode(DefaultValue.ObjectMethod,
+                                              mangled)
 
         # _validate_* methods
         n = len(VALIDATE_PREFIX)
@@ -338,7 +342,8 @@ class AtomMeta(type):
             target = mangled[n:]
             if target in members:
                 member = clone_if_needed(members[target])
-                member.set_post_validate_mode(PostValidate.ObjectMethod_OldNew, mangled)
+                member.set_post_validate_mode(PostValidate.ObjectMethod_OldNew,
+                                              mangled)
 
         # _post_getattr_* methods
         n = len(POST_GETATTR_PREFIX)
@@ -346,7 +351,8 @@ class AtomMeta(type):
             target = mangled[n:]
             if target in members:
                 member = clone_if_needed(members[target])
-                member.set_post_getattr_mode(PostGetAttr.ObjectMethod_Value, mangled)
+                member.set_post_getattr_mode(PostGetAttr.ObjectMethod_Value,
+                                             mangled)
 
         # _post_setattr_* methods
         n = len(POST_SETATTR_PREFIX)
@@ -354,7 +360,8 @@ class AtomMeta(type):
             target = mangled[n:]
             if target in members:
                 member = clone_if_needed(members[target])
-                member.set_post_setattr_mode(PostSetAttr.ObjectMethod_OldNew, mangled)
+                member.set_post_setattr_mode(PostSetAttr.ObjectMethod_OldNew,
+                                             mangled)
 
         # _observe_* methods
         n = len(OBSERVE_PREFIX)
@@ -390,7 +397,7 @@ def __newobj__(cls, *args):
     return cls.__new__(cls, *args)
 
 
-class Atom(CAtom, metaclass=AtomMeta):
+class Atom(with_metaclass(AtomMeta, CAtom)):
     """ The base class for defining atom objects.
 
     `Atom` objects are special Python objects which never allocate an

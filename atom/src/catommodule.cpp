@@ -20,16 +20,6 @@
 
 using namespace PythonHelpers;
 
-struct module_state {
-    PyObject *error;
-};
-
-#if PY_MAJOR_VERSION >= 3
-#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
-#else
-#define GETSTATE(m) (&_state)
-static struct module_state _state;
-#endif
 
 static PyMethodDef
 catom_methods[] = {
@@ -40,41 +30,35 @@ catom_methods[] = {
 
 #if PY_MAJOR_VERSION >= 3
 
-static int catom_traverse(PyObject *m, visitproc visit, void *arg) {
-    Py_VISIT(GETSTATE(m)->error);
-    return 0;
-}
-
-static int catom_clear(PyObject *m) {
-    Py_CLEAR(GETSTATE(m)->error);
-    return 0;
-}
-
 static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
         "catom",
-        NULL,
-        sizeof(struct module_state),
+        "catom extension module",
+        -1,
         catom_methods,
         NULL,
-        catom_traverse,
-        catom_clear,
+        NULL,
+        NULL,
         NULL
 };
 
 #define INITERROR return NULL
+#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
 
-PyMODINIT_FUNC
-PyInit_catom( void )
 #else
+
 #define INITERROR return
-PyMODINIT_FUNC
-initcatom( void )
+#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
+
 #endif
+
+
+MOD_INIT(catom)
 {
 #if PY_MAJOR_VERSION >= 3
     PyObject *mod = PyModule_Create(&moduledef);
 #else
+    PyObject* mod = Py_InitModule( "catom", catom_methods );
 #endif
     if( !mod )
         INITERROR;
@@ -96,7 +80,6 @@ initcatom( void )
     //    INITERROR;
     if( import_enumtypes() < 0 )
         INITERROR;
-
 
     Py_INCREF( &Member_Type );
     Py_INCREF( &CAtom_Type );
