@@ -52,6 +52,10 @@ class BuildExt(build_ext):
         'msvc': ['/EHsc']
     }
 
+    def initialize_options(self):
+        super().initialize_options()
+        self.debug = False
+
     def build_extensions(self):
         ct = self.compiler.compiler_type
         opts = self.c_opts.get(ct, [])
