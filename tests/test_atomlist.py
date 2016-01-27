@@ -8,6 +8,7 @@
 from __future__ import (division, unicode_literals, print_function,
                         absolute_import)
 
+from sys import version_info
 from pickle import dumps, loads
 from functools import wraps
 
@@ -467,7 +468,8 @@ class TestContainerNotify(object):
     def container_sort(self, mlist):
         mlist.sort()
         eq_(self.change['operation'], 'sort')
-        eq_(self.change['cmp'], None)
+        if version_info.major < 3:
+            eq_(self.change['cmp'], None)
         eq_(self.change['key'], None)
         eq_(self.change['reverse'], False)
 
@@ -476,7 +478,8 @@ class TestContainerNotify(object):
         key = lambda i: i
         mlist.sort(key=key, reverse=True)
         eq_(self.change['operation'], 'sort')
-        eq_(self.change['cmp'], None)
+        if version_info.major < 3:
+            eq_(self.change['cmp'], None)
         eq_(self.change['key'], key)
         eq_(self.change['reverse'], True)
 
@@ -494,8 +497,9 @@ class TestContainerNotify(object):
         yield (self.container_sort, 'typed')
         yield (self.container_key_sort, 'untyped')
         yield (self.container_key_sort, 'typed')
-        yield (self.container_cmp_sort, 'untyped')
-        yield (self.container_cmp_sort, 'typed')
+        if version_info.major < 3:
+            yield (self.container_cmp_sort, 'untyped')
+            yield (self.container_cmp_sort, 'typed')
 
     @containertest
     def container_set_item(self, mlist):

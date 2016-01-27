@@ -751,7 +751,11 @@ public:
 
     PyObject* sort( PyObject* args, PyObject* kwargs )
     {
+#if PY_MAJOR_VERSION < 3
         static char *kwlist[] = { "cmp", "key", "reverse", 0 };
+#else
+        static char *kwlist[] = { "key", "reverse", 0 };
+#endif
         PyObjectPtr res( ListMethods::sort( m_list.get(), args, kwargs ) );
         if( !res )
             return 0;
@@ -765,11 +769,17 @@ public:
             PyObject* cmp = Py_None;
             PyObject* key = Py_None;
             int rev = 0;
+#if PY_MAJOR_VERSION < 3
             if( !PyArg_ParseTupleAndKeywords(
                 args, kwargs, "|OOi", kwlist, &cmp, &key, &rev ) )
                 return 0;
             if( !c.set_item( PySStr::cmp(), cmp ) )
                 return 0;
+#else
+            if( !PyArg_ParseTupleAndKeywords(
+                args, kwargs, "|Oi", kwlist, &key, &rev ) )
+                return 0;
+#endif
             if( !c.set_item( PySStr::key(), key ) )
                 return 0;
             if( !c.set_item( PySStr::reverse(), rev ? Py_True : Py_False ) )
