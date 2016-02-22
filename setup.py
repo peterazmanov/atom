@@ -53,7 +53,7 @@ class BuildExt(build_ext):
     }
 
     def initialize_options(self):
-        super().initialize_options()
+        build_ext.initialize_options(self)
         self.debug = False
 
     def build_extensions(self):
