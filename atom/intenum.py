@@ -15,6 +15,7 @@ if sys.version_info >= (3,):
 else:
     import copy_reg
 
+from future.builtins import int as il
 from future.utils import with_metaclass
 from past.builtins import basestring
 
@@ -137,7 +138,7 @@ class _IntEnumMeta(type):
 
     def __call__(cls, which):
         enum = None
-        if isinstance(which, int):
+        if isinstance(which, il):
             enum = cls.__reved__.get(which)
         elif isinstance(which, basestring):
             enum = cls.__enums__.get(which)
